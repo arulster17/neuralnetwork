@@ -49,7 +49,7 @@ public class NoiseStuff {
                 result[i] = inputs[i];
             }
         }
-        System.out.println("Added Noise");
+        //System.out.println("Added Noise");
         return result;
     }
     
@@ -114,7 +114,7 @@ public class NoiseStuff {
                 result[28*i + j] = estimateValue(rotI, rotJ, input);
             }
         }
-        System.out.println("Rotated by "+ (180*rtangle/Math.PI) + " degrees");
+        //System.out.println("Rotated by "+ (180*rtangle/Math.PI) + " degrees");
         return result;
     }
     
@@ -138,7 +138,7 @@ public class NoiseStuff {
                 result[28*i + j] = estimateValue(newI, newJ, input);
             }
         }
-        System.out.println("Scaled by " + 1/scale);
+        //System.out.println("Scaled by " + 1/scale);
         return result;
     }
     
@@ -155,8 +155,8 @@ public class NoiseStuff {
                 result[28*i + j] = estimateValue(newI, newJ, input);
             }
         }
-        System.out.println("Transposed with displacement " + dsp
-                           + " and angle " + (180*angle/Math.PI) + " degrees");
+        //System.out.println("Transposed with displacement " + dsp
+        //                   + " and angle " + (180*angle/Math.PI) + " degrees");
         return result;
     }
 }

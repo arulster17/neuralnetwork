@@ -46,14 +46,14 @@ public class DigitsNetwork {
     }
     
     public static void main(String [] args) throws IOException {
-        int[] layers = {784, 100, 10};
+        int[] layers = {784, 500, 200, 50, 10};
         FileReader fr = new FileReader("digits/readableTrainingData/trainingAnswers"); 
         BufferedReader br = new BufferedReader(fr);
         String[] answers = br.readLine().split(" ");
         
         
         
-        double[][] inputs = new double[60000][784];
+        double[][] inputs = new double[120000][784];
         String[] ss;
         
         int k=0;
@@ -63,12 +63,14 @@ public class DigitsNetwork {
             while(br.ready()) {
                 ss = br.readLine().split(" ");
                 for(int z = 0; z < 784; z++) {
-                    inputs[k][z] = Double.valueOf(ss[z]) / 256;
+                    inputs[2*k][z] = Double.valueOf(ss[z]) / 256;
+                    inputs[2*k+1][z] = Double.valueOf(ss[z]) / 256;
                 }
                 k++;
                 
             }
         }
+        /*
         Random r = new Random();
         int s = r.nextInt(60000);
         NoiseStuff.printImage(inputs[s]);
@@ -78,15 +80,16 @@ public class DigitsNetwork {
         NoiseStuff.printImage(NoiseStuff.randomize(inputs[s]));
         
         System.out.println(answers[s]);
+        */
         br.close();
         double[] trainingAnswer = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         
-        DataPoint[] dataset = new DataPoint[60000];
+        DataPoint[] dataset = new DataPoint[120000];
         
-        for(int i = 0; i < 60000; i++) {
-            trainingAnswer[Integer.valueOf(answers[i])] = 1;
-            dataset[i] = new DataPoint(inputs[i], trainingAnswer.clone());
-            trainingAnswer[Integer.valueOf(answers[i])] = 0;
+        for(int i = 0; i < 120000; i++) {
+            trainingAnswer[Integer.valueOf(answers[i/2])] = 1;
+            dataset[i] = new DataPoint(NoiseStuff.randomize(inputs[i]), trainingAnswer.clone());
+            trainingAnswer[Integer.valueOf(answers[i/2])] = 0;
         }
         long start = System.currentTimeMillis();
         for(int t = 0; t < 1; t++) {
@@ -98,6 +101,7 @@ public class DigitsNetwork {
             //System.out.println("starting training");
             for(int i = 0; i < dataset.length / batchSize; i++) {
                 digitNet.learn(Arrays.copyOfRange(dataset, batchSize*i, batchSize*(i+1)), 1.25);
+                System.out.println("Batch " + (i+1) + " of " + (dataset.length / batchSize) + " done.");
             }
             //System.out.println("Training Completed");
             //System.out.println("Time Elapsed: " + (System.currentTimeMillis() - start) + "ms");
